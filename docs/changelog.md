@@ -4,6 +4,10 @@
 
 记录源码与发布内容，不将本地构建、npm 发布和本机升级混为同一状态。日期采用 Asia/Hong_Kong。更早历史见 [Git 提交记录](https://github.com/KouzakiUmi/dsh-antigravity-acp/commits/main/)。
 
+## 未发布
+
+- **`xhigh` 只折叠、不进档位表**：官方 1.5.x 给 Gemini 4 Hydrogen 增加了 `-xhigh` 后缀，原实现的档位正则只认 `low|medium|high`，于是 `gemini-4-hydrogen-xhigh` 被折叠成一个**独立家族**（选择器多出一行「Gemini 4 Hydrogen (XHigh)」）。但直接把 `xhigh` 加进 `AGY_REASONING_EFFORTS` 会让模型声明四档，宿主侧的 reasoning 校验只接受已注册档位，选中后调用以 `UNSUPPORTED_REASONING_EFFORT` 失败。现在新增 `AgyModelTier`（`AgyReasoningEffort | 'xhigh'`）只用于识别与折叠，档位表保持三档；`tierForModelId` / `stripTierLabel` 认识 `xhigh`。
+
 ## 0.1.38 · 2026-11-12
 
 - **无档位模型不再产出非法元数据**：目录里没有思考强度变体的家族 id 之前返回 `reasoning: { efforts: [] }`，宿主把空数组判为 `INVALID_MODEL_REASONING` 并让该模型完全不可用；现在改为省略 `reasoning`（不支持档位就是不声明菜单）。
